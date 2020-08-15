@@ -2,12 +2,12 @@
 
 echo "Welcome Flip Coin Simulation"
 
+#declare dictionary
+declare -A dictionary
+
 #constant
 HEAD=1
 TAIL=0
-
-#declare dictionary
-declare -A dictionary
 
 coin=$((RANDOM%2))
 if [ $coin -eq $HEAD ]
@@ -17,6 +17,7 @@ else
 	echo "Tail"
 fi
 
+# Combinations of  coin
 function combination(){
 	for (( i=0;i<$1;i++ ))
 	do
@@ -30,24 +31,26 @@ function combination(){
 			else
 				string+=T
 			fi
-done
+	done
 	dictionary[$string]=$(( ${dictionary[$string]}+1 ))
 done
-echo "${!dictionary[@]}":"${dictionary[@]}"
+echo "All Combination : ${dictionary[@]}"
+echo  "All keys 		 : ${!dictionary[@]}"
 }
 
-#percentage  calculated
+#Find percentage 
 function percentageFind()
 {
 	for keys in ${!dictionary[@]}
 	{
 
 		persentage=`echo "scale=2; $((${dictionary[$keys]}))/$flipCoin*100" | bc`
+		echo  "$keys =  $persentage"
    }
 }
 
 read -p  "How many time you flip coin" flipCoin
-read -p  "combination single press 1) double press 2)" choice
+read -p  "combination single press 1) double press 2) third press for combination triplet " choice
 
 #call method
 if [ $choice -eq 1 ]
@@ -57,6 +60,10 @@ then
 elif [ $choice -eq 2 ]
 then
 	combination $flipCoin $choice
+   percentageFind
+elif [ $choice  -eq 3 ]
+then
+   combination $flipCoin $choice
    percentageFind
 else
 	echo "Please Enter a Right Choice" 
